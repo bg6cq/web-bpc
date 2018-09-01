@@ -227,7 +227,7 @@ for(i=0;i<3;i++) {
                 else if (signal[i] < 0.35) ctx2d.fillStyle = "#7F7F7F";
                 else ctx2d.fillStyle = "#007F00";
             }
-            ctx2d.fillRect((i%30)*30, Math.floor(i/30)*100, 30 * signal[i], 80);
+            ctx2d.fillRect((i%30)*30, Math.floor(i/30)*100, 30 * signal[i] *2, 80);
         }
         requestAnimationFrame(render);
     }
