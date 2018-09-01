@@ -24,7 +24,7 @@ BPC无线电波是68.5kHz电波，本程序发出17.125kHZ方波，方波的四�
 
 ##许可证
 
-它提供了MIT许可证。请参阅[LICENSE.md（https://github.com/shogo82148/web-jjy/blob/gh-pages/LICENSE.md）。
+MIT许可证。请参阅[LICENSE.md](LICENSE.md)。
 
 ##相关链接
 
