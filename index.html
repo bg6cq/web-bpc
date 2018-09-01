@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web BPC</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      canvas {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>BPC信号发射Web版</h1>
+    <p>
+      单击 Start 发送BPC信号。
+    </p>
+
+    <button id="control-button">Start</button> <span id="time"></span>
+    <div>
+      <canvas id="canvas" width="1000" height="200"></canvas>
+    </div>
+    <script src="bpc.js"></script>
+
+    <h2>使用方法</h2>
+    连接耳机，耳机靠近电波钟，确保计算机时间准确，单击 Start 开始发送信号。
+    <h2>程序说明</h2>
+    本程序参考 <a href=http://shogo82148.github.io/web-jjy/>http://shogo82148.github.io/web-jjy/</a>修改，程序代码请见<a href=https://github.com/bg6cq/web-bpc>https://github.com/bg6cq/web-bpc</a>
+  </body>
+</html>
