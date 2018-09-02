@@ -1,16 +1,45 @@
 (function() {
-    var freq = 17125;
+    var freq = 68500/5;
     var ctx;
     var signal;
-    var debug = false;
+    var debug = true;
 
     var AudioContext = window.AudioContext || window.webkitAudioContext;
 
+    function dump_msg(bitarray) {
+        console.log("bitarray len="+bitarray.length);
+        console.log(bitarray);
+        for(i=0;i<3;i++) {
+		console.log("P0=" + bitarray[i*40+0] + " " + bitarray[i*40+1]);
+		console.log("P1=" + bitarray[i*40+2] + " " + bitarray[i*40+3]);
+		console.log("P2=" + bitarray[i*40+4] + " " + bitarray[i*40+5]);
+		console.log("Hour="+ bitarray[i*40+6] + " " + bitarray[i*40+7]+ " "+bitarray[i*40+8] + " " + bitarray[i*40+9] + ":" +  (bitarray[i*40+6]*8 + bitarray[i*40+7]*4 + bitarray[i*40+8]*2 + bitarray[i*40+9]));
+		console.log("Min="+ bitarray[i*40+10] + " " + bitarray[i*40+11]+ " "+bitarray[i*40+12] + " " + bitarray[i*40+13] + " "+bitarray[i*40+14] + " " + bitarray[i*40+15] + ":" +  
+                        ( bitarray[i*40+10]*32 + bitarray[i*40+11]*16+ bitarray[i*40+12]*8 + bitarray[i*40+13]*4 + bitarray[i*40+14]*2 + bitarray[i*40+15]));
+		console.log("WeekDay="+ bitarray[i*40+16] + " " + bitarray[i*40+17]+ " "+bitarray[i*40+18] + " " + bitarray[i*40+19] + ":" +  (bitarray[i*40+16]*8 + bitarray[i*40+17]*4 + bitarray[i*40+18]*2 + bitarray[i*40+19]));
+		console.log("P3=" + bitarray[i*40+20] + " " + bitarray[i*40+21]);
+		crc = 0;
+		for(j=2;j<20;j++)
+			crc = crc ^ bitarray[i*40+j];
+		console.log("crc="+crc);
+		if(bitarray[i*40+21]==crc) console.log("CRC OK");
+		console.log("Day="+ bitarray[i*40+22] + " " + bitarray[i*40+23]+ " "+bitarray[i*40+24] + " " + bitarray[i*40+25] + " "+bitarray[i*40+26] + " " + bitarray[i*40+27] + ":" +  
+                        ( bitarray[i*40+22]*32 + bitarray[i*40+23]*16+ bitarray[i*40+24]*8 + bitarray[i*40+25]*4 + bitarray[i*40+26]*2 + bitarray[i*40+27]));
+		console.log("Month="+ bitarray[i*40+28] + " " + bitarray[i*40+29]+ " "+bitarray[i*40+30] + " " + bitarray[i*40+31] + ":" +  (bitarray[i*40+28]*8 + bitarray[i*40+29]*4 + bitarray[i*40+30]*2 + bitarray[i*40+31]));
+		console.log("Year="+ bitarray[i*40+32] + " " + bitarray[i*40+33]+ " "+bitarray[i*40+34] + " " + bitarray[i*40+35] + " "+bitarray[i*40+36] + " " + bitarray[i*40+37] + ":" +  
+                        ( bitarray[i*40+32]*32 + bitarray[i*40+33]*16+ bitarray[i*40+34]*8 + bitarray[i*40+35]*4 + bitarray[i*40+36]*2 + bitarray[i*40+37]));
+		console.log("P4=" + bitarray[i*40+38] + " " + bitarray[i*40+39]);
+		crc = 0;
+		for(j=22;j<38;j++)
+			crc = crc ^ bitarray[i*40+j];
+		console.log("crc="+crc);
+		if(bitarray[i*40+39]==crc) console.log("CRC OK");
+        }
+    }
     function schedule(date) {
         var now = Date.now();
         if (debug) {
-            now = new Date(2008, 0, 19, 18, 14, 40);
-            console.log(now);
+            console.log(now.toString());
         }
 
         var start = date.getTime();
@@ -22,6 +51,7 @@
         var day = date.getDate();
         var month = date.getMonth() + 1;
         var array = [];
+        var bitarray = [];
         var pm = 0;
         if (hour >= 13) {
             hour -= 12;
@@ -30,6 +60,8 @@
 
         function P0(s) {
             array.push(0);
+            bitarray.push(0);
+            bitarray.push(0);
         }
 
         var pa;
@@ -46,6 +78,8 @@
                 tm = 0.4;
             else console.log("error " + value);
             array.push(tm);
+            bitarray.push((value>>1)&1);
+            bitarray.push(value&1);
             var t = s + offset;
             if (t < 0) return value;
             var osc = ctx.createOscillator();
@@ -143,6 +177,8 @@
         }
 
         console.log(array);
+        if(debug)
+            dump_msg(bitarray);
         return array;
     }
 
