@@ -62,6 +62,15 @@
             array.push(0);
             bitarray.push(0);
             bitarray.push(0);
+            var t = s + offset;
+            if (t < 0) return ;
+            var tm = 1;
+            var osc = ctx.createOscillator();
+            osc.type = "square";
+            osc.frequency.value = freq;
+            osc.start(t);
+            osc.stop(t + 1);
+            osc.connect(ctx.destination);
         }
 
         var pa;
@@ -85,8 +94,8 @@
             var osc = ctx.createOscillator();
             osc.type = "square";
             osc.frequency.value = freq;
-            osc.start(t);
-            osc.stop(t + tm);
+            osc.start(t + tm);
+            osc.stop(t + 1);
             osc.connect(ctx.destination);
             return value;
         }
